@@ -1,4 +1,103 @@
-# ITS
+- # Definitionen
+    - ### IT-Sicherheit
+        - IT-Sicherheit beschäftigt sich mit der Vorbeugung, dem Erkennen und der Reaktion auf Ereignisse, die die Integrität der Daten, die Nutzbarkeit der Systeme und die (digitale) Privatsphäre gefährden.
+    - ### Security vs Safety
+    - Security: Angriffssicherheit
+        - Schutz eines technischen Systems vor (Hacker-)Angriffen
+    - Safety: Betriebssicherheit
+        - Schutz vor einem System (technische Anlage, Flugzeugabsturz)
+- ### Problematik
+    - Gut und Böse sind nicht zu unterscheiden
+- ### IT-Security
+    - **Vorbeugung**
+    - **Erkennung**
+    - **Reaktion**
+        - auf Ereignisse
+    - **Integrität** der Daten
+    - **Nutzbarkeit** der Systeme
+    - **Privatsphäre** gefährden
+    -
+
+- ## Definitionen
+	- ### Hauptziele zum Schutz von Informationen
+		- ### Vertraulichkeit/Zugriffsschutz
+			- Nur berechtigte Personen sollen eine Nachricht lesen können
+		- ### Integrität/Änderungsschutz
+			- Ein Empfänger soll feststellen können, ob die Daten nach ihrer Erzeugung verändert wurden
+		- ### Authentizität/Fälschungsschutz
+			- Der Urheber einer Nachricht soll eindeutig identifizierbar sein
+		- ### Verbindlichkeit/Nichtabstreitbarkeit
+			- Der Urheber einer Nachricht soll nicht in der Lage sein, seine Urheberschaft zu bestreiten
+- ## Begriffe
+	- **Klartext** (cleartext): Ursprungsnachricht, die verschlüsselt werden soll
+	- **Schlüssel** (key): Geheimnis, das zur Verschlüsselung eingesetzt wird
+	- **Passwort** (password): Geheimnis, das zu einem Schlüssel führt. In einigen Anwendungen ist die Abbildung Passwort zu Schlüssel eine 1:1 Abbildung, sprich das Passwort entspricht dem Schlüssel
+	- **Cipher** (cipher): Verschlüsselte Nachricht
+- ## Verschlüsselungsverfahren
+	- ### Stromchiffre Verfahren
+		- Verschlüsselung findet zeichenweise statt
+	- ### Blockchiffre Verfahren
+		- Der Klartext wird in Blöcke eingeteilt
+		- Es wird ein Block on Zeichen verschlüsselt (z.B. 256 Bit == 32 Zeichen)
+		- unsicherer als Stromchiffre -> **Wiederholung**
+	- ### Symmetrische Verfahren
+		- Zum Ver- und Entschlüsseln wird der gleiche Schlüssel eingesetzt
+	- ### Asymmetrische Verfahren
+		- Zum Ver- und Entschlüsseln werden jeweils unterschiedliche Schlüssel eingesetzt
+- ## Symmetrische Verfahren
+	- ### Vorteil: Schnell
+	- ### Nachteil: Shared Secret
+		- ### Shared Secret Problemstellen
+			- Wenn mehr als zwei Personen ein Geheimnis kennen kann eine "Verräter" nicht mehr eindeutig identifiziert werden: Das Geheimnis gilt als *nicht wirklich sicher*
+			- **Schlüsseltransport:** Der Schlüssel muss zwischen den Partnern **sicher** ausgetauscht werden
+	- ## Cäsar-Rotation
+		- Stromchiffre-Verfahren
+		- Rotiere die Buchstaben eines Satzes um ROT+n stellen im Alphabet
+		- ![image.png](../assets/image_1722769225362_0.png)
+	- ## XOR-Verfahren
+		- Zum Verschlüsseln wird ein Schlüssel eingesetzt
+		- Die verschlüsselte Nachricht ergibt sich aus der XORVerknüpfung des Klartextes mit dem Schlüssel
+		- ### Vorteil
+			- Sehr sicheres Verfahren unter den Voraussetzungen:
+				- Der Schlüssel ist mindestens so lang wie die Nachricht
+				- Die Zeichen des Schlüssels sind gleichverteilt
+				- Alle Zeichen des Alphabets tauchen gleichhäufig im Schlüssel auf
+		- ##
+	- ## Schlüsselwahl
+		- Folge von Pseudozufallszahlen. Das Passwort ist der Initialwert für den Zufallszahlengenerator.
+		- Schlechtere Variante: Übergang zu Blockchiffre, bei der der Block so lang wie der Schlüssel ist.
+-
+	- ## Electronic Code Book (ECB)
+		- ![image.png](../assets/image_1722773154364_0.png)
+		- Plaintext wird direkt mit dem Key verschlüsselt um den Ciphertext zu generieren
+		- ![image.png](../assets/image_1722774408646_0.png)
+		- Decryption kann mit dem selben Key vorgenommen werden
+		- ### Unsicher
+	- ## Cipher Block Chaining (CBC)
+		- ### Verschlüsselung
+		- Block wird mit Key **und** Ciphertext des vorhergehenden Blocks verknüpft
+		- Erster Block nutzt **Initialisierungsverktor IV**
+		- ![image.png](../assets/image_1722774055629_0.png)
+		- SICHER, aber nicht parallelisierbar (auf Multicoresystemen)
+		- ### Entschlüsselung
+		- XOR-Vernküpfung von
+			- Cipher
+			- Cipher um einen Block nach rechts verrückt
+				- Erster Block mit dem IV
+			- Schlüssel
+		- führt zum Klartext
+		- ![image.png](../assets/image_1722774386132_0.png)
+	- ## Counter Mode (CTR)
+	- Jeder Block wird mit Key + IV vernküpft
+	- Jeder Block hat individuellen IV
+	- IV ergibt sich bspw. aus XOR eines Zufallswertes mit Blocknummer
+	- **Es ist parallelisierbar**
+	- ### Encryption
+	- ![image.png](../assets/image_1722774576838_0.png)
+	- ### Decryption
+	- ![image.png](../assets/image_1722774638620_0.png)
+	-
+
 - ## Kennzeichen
 	- Nachrichten/Daten werden für einen definierten Personenkreis verschlüsselt.
 	- No shared secret

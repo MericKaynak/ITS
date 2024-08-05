@@ -275,5 +275,83 @@
 		- PGP zur Verschlüsselung von einzelnen Dateien oder auch E-Mails
 		- VeraCrypt zur Verschlüsselung von Datenträgern
 		-
-	-
-	-
+- ## VeraCrypt
+  -  Open-Source pontenzial sicherer sein kann
+  - SW kann auf versteckte Funktionalitäten hin überprüft werden
+  - Plattformunabhängigkeit
+  - Mobile Lösung durch Verwendung von Flash-Medien
+  - Nutzbar als Konsolenwerkzeug, aber auch über eine grafische Oberfläche
+  - ### Hidden Volume
+    -  Äußerer Container (sichtbar) enthält Scheindaten und einen
+    - inneren Container, der versteckt und nicht erkennbar oder nachweisbar ist.
+    - Für den Zugang gibt es zwei Passwörter: 
+      - eines für den äußeren Container
+      - eines für den inneren Container
+    - 1. Äußeres Volume mit eindeutigem Passwort anlegen.
+    - 2. Äußeres Volume mounten und Alibi-Daten in das äußere Volume schreiben.
+    - 3. Volume wieder aushängen.
+    - 4. Inneres Volume mit eigenem, starkten Passwort anlegen. 
+      
+- ## EMail-Verschlüsselung
+  - Grundsätzlich konkurieren zwei Verfahren:
+  	- => S/Mine
+    - =>  PGP
+  - Unterschied:
+    - S/Mime setzt auf eine zentrale PKI
+    - PGP nutzt den Web of Trust Ansatz
+  - Software: Integration in vielen Produkten, insbesondere **Thunderbird**.
+
+- ## Hashing
+  - Gewährleistung von Integrität von Daten.
+  - Verschlüsselung des Passwortes.
+  - Hahwerte plus Signatur dienen als Integritätsschutz für
+  - Sotware (zum Beispiel beim automatischen Update).
+  - ## Verifikation von Software-Paket
+    - Download der Software
+	- Download des signierten Hashwertes
+
+- ## Kapitel Zugriffskontrolle
+  - ### Credentials 
+    - /etc/passwd: Logindaten (Name, Homeverzeichnis, Loinshell)
+    -	/etc/shadow: Secrets (Salz, Passworthash, Algorithmus, ... )
+    -	/etc/group: Gruppen und deren Mitglieder
+  - ### Loginprozess
+    - Rechenprozess erfragt den Loginname 
+    - Soald der Name eingegeben worden ist, mutiert (Stichwort exec) der Job zum Login-Prozess. 
+    - Login-Prozess erfragt das Passwort 
+    - Login-Prozess hasht Passwort+Salz und mutiert bei Übereinstimmung die in /etc/passwd abgelegte Loginshell.
+  - ### Sicherheitskonzepte
+    - ** Klassisch: Discretionary Access Control:** Die Zugriffsentscheidung basiert auf der Identität des
+	  Users/Rechenprozess. Die Zugriffsrechte werden für Objekte
+	  (Dateien) pro Benutzer festgelegt.  
+      - Jedes Objekt (Datei) hat einen
+	  	- Besitzer (owner, user) und ist einer
+	  	- Gruppe (group) zugeordnet. Dazu gibt es noch die 
+        - Übrigen (other)
+	  Jobs laufen unter der Kennung des Aufrufers und können
+	  entsprechend der Besitzer-Rechte auf Objekte zugreifen.
+	  Der Super-User (Root) darf auf alle Objekte zugreifen 
+    - **Mandatory Access Control:** Die Zugriffsentscheidung basiert auf allgemeinen Regeln und
+	  zusätzlicher Information über den Zugreifenden
+	  (User/Rechenprozess).
+    - **Role Based Access Control:** Rechte werden auf Basis von Arbeitsprozessen abstrahiert.
+	  Benutzern werden eine oder mehrere Rollen (z.B. Webmaster)
+	  zugeordnet. Die Zugriffsentscheidung auf Betriebsmittel
+	  (Objekte, Dateien) findet auf Basis der aktuellen Rolle des
+	  Zugreifenden (Rechenprozess) statt. Je nach Rolle sind dabei
+	  möglicherweise unterschiedliche Zugriffsberechtigungen
+	  notwendig.
+  - ### Rechte 
+    - Für jedes Objekt sind die folgenden Rechte festzulegen:
+      - Lesen
+      - Schreiben
+      - Ausführen/Wechseln
+    - Zusätzlich gibt es noch die Attribute S-Bit und Sticky-Bit
+      - S-Bit: Ein Programm wird unter der ID des Besitzers gestartet, und bekommt nicht – wie sonst üblich – die ID des Elternprozess vererbt
+      - Sticky-Bit: Löschen oder Umbenennen von Dateien ist nur
+      dem Besitzer erlaubt.
+    -  Bei gesetztem S-Bit kann ein Programm zwischen den ID’s
+      (Besitzer/Aufrufer) umschalten
+    - Spezialrechte ergeben sich aus der Kombination von S-Bit
+	  user, S-Bit group und Sticky-Bit (sst)
+- ### Firewall

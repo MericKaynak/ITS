@@ -1,6 +1,7 @@
 - # Definitionen
     - ### IT-Sicherheit
-        - IT-Sicherheit beschäftigt sich mit der Vorbeugung, dem Erkennen und der Reaktion auf Ereignisse, die die Integrität der Daten, die Nutzbarkeit der Systeme und die (digitale) Privatsphäre gefährden.
+        - IT-Sicherheit beschäftigt sich mit der Vorbeugung, dem Erkennen und der Reaktion auf Ereignisse, die die Integrität der Daten, 
+        - die Nutzbarkeit der Systeme und die (digitale) Privatsphäre gefährden.
     - ### Security vs Safety
     - Security: Angriffssicherheit
         - Schutz eines technischen Systems vor (Hacker-)Angriffen
@@ -355,3 +356,169 @@
     - Spezialrechte ergeben sich aus der Kombination von S-Bit
 	  user, S-Bit group und Sticky-Bit (sst)
 - ### Firewall
+	Firewall herungssystem zum Schutz vor unerwünschten (Netzwerk-)zugriffen.
+  - ### Realisierungsform
+    - Aktive Komponente, die Datenpakete entgegennimmt und filtert.
+    	- Komponente zwischen zwei Netzen
+     	- Komponente zwischen Netz und Endpunkt (z.B. Rechner, Applikation)
+    - Eine spezielle Form eines Routers.
+  - ###  Aufgabe
+    - Filterung des Datenverkehrs (z.B. verdächtige Pakete
+      wegwerfen)
+    - Abicherung von Diensten (die beispielsweise unbewusst/ungewollt aktiv sind. 
+    - Reduktion der Wahrscheinlichkeit, das Software-Fehler augenutzt werden können
+      - Daten durchlaufen weniger Code, da diese erst gar nicht die
+        Applikation erreichen.
+        - Je weniger Code durchlaufen wird, desto weniger
+        (Software-)Fehler können getriggert werden.
+    - Last-Reduktion
+  - ### Portadressen
+    - tp 21/tcp telnet 23/tcp
+	-  ssh 22/tcp ssh 22/udp
+	-  http 80/tcp http 80/udp
+	-  https 443/tcp https 443/udp
+	-  smtp 25/tcp smtp 25/udp
+	-  dns 53/tcp dns 53/udp
+	-  openvpn 1194/tcp openvpn 1194/udp
+- ### VPN
+  - Technik zur sicheren Verbindung mehrerer (meist privater) Teilnetze 
+  - Ermöglicht den geschützten, ortsunabhängigen Zugriff auf interne Daten. 
+  - Verwendet meist einen öffentlichen Carrier (Internet).
+  - ### Vorteile
+    - Subnetze unterschiedlicher (Unternehmens-)Standorte erscheinen wie ein Netz. 
+    - Preiswerte Technologie 
+    - Sichere Datenübertragung
+  - ### Aufbau 
+  	- 1. Tunneln
+    - 1. Authentifizieren
+	- 1. Verschlüsseln
+  - ### Einsatz
+    - Site-to-Site
+      - Mehrere Standorte werden preiswert und sicher miteinander
+		verbunden. 
+      - Alternative zu einer (teuren und unsicheren) Standleitung. 
+      - Ermöglicht auch Partnerfirmen den kontrollierten Zugriff auf Teile des internen Netzes
+    - Site-to-End
+      - Remote-Zugriff auf das Intranet (z.B. Hochschule
+		Niederrhein)
+      - Anbindung von Heimarbeitsplätzen an das
+		Unternehmensnetz.
+    - End-to-End
+      - Zwei (oder auch mehr) Nutzer tauschen sicher Daten
+		miteinander aus.
+  - ### IPSec
+    - Im professionellen Umfeld verbreitet 
+    - Einsatzszenario Site-to-Site (seltener Site-to-End)
+    - Sehr komplex!!!
+      - => Unproblematischer: Peering-Points vom gleichen Hersteller
+    -  Nur eingeschränkt Client-Software verfügbar
+  - ### WireGuard
+    - Performante VPN-Implementierung 
+    - Open Source 
+    - Einfach strukturiert:
+      - Nur UDP 
+      - Limitiertes Set an Verfahren für Schlüsselaustausch und 
+        - **Verschlüsselung**
+          - Curve25519 
+          - ChaCha20
+    - Integration im Linux-Kernel (ab 5.6 im Standard-Kernel)
+    - Implementierungen für Linux, BSD-Varianten, Windows, Mac)
+  - ### Vorteile 
+    - Portabilität - benötigt nur sehr geringe Kernelunterstützung 
+    - Verbreitung - durch viele Betriebssysteme unterstützt
+  - ### Nachteile 
+    - Laufzeit - Zeitverzögerung durch notwendige Kontextwechsel Kernel-Userland 
+    - Angriffsfläche für DoS-Angriff
+  - ### Technik
+    - Pakete, die an eine zum Tunnel-Endpunkt gehörende
+		 IP-Adresse geschickt werden, werden nicht an ein
+		 physisches Netzwerkinterface geroutet, sondern an die
+		 OpenVPN-Applikation weitergereicht. 
+    - OpenVPN-Applikation verpackt die Daten in udp (oder tcp)
+		 Pakete und schickt sie normal (und mit Hilfe von TSL) an
+		 die Gegenstelle. 
+    - Die Gegenstelle packt die Daten aus und routet sie ins
+		 interne Netz. 
+    - Für das Routen der Pakete an die OpenVPN-Applikation
+		 wird ein (logisches) Netzwerkinterface benötigt
+		 (TUN-Device). 
+  - ### Ablauf
+    - 1. Die Applikation fordert Daten an (zum Beispiel
+		 http://rechner.in-meinem-netz.de, IP=192.168.99.19). 
+    - 1. Der Kernel routet die Anfrage (Daten) an das TUN-Device
+		 weiter. 
+    - 1. Das TUN-Device übergibt die Daten dem lokalen
+		 OpenVPN-Prozess. 
+    - 1. Der lokale VPN-Prozess verschlüsselt die Daten und
+		 übergibt diese dem Kernel mit dem Auftrag, sie an den
+		 Zielserver zu verschicken (über UDP-Port 1194,
+		 Öffentliche-Ziel-IP=194.94.121.156). 
+    - 1. Die Daten werden übertragen.
+    - 1. Der Kernel auf dem Zielrechner packt die Daten aus und
+	   übergibt sie der Applikation, die auf dem UDP- Port 1194
+	   lauscht. 
+    - 1. Der OpenVPN-Server entschlüsselt und authentifiziert die
+     Daten und übergibt sie zurück an den Kernel, der sie an die
+     in den Daten spezifizierte IP-Adresse (IP=192.168.99.19)
+     routet.
+  - ### Requirements
+    - 1. PKI
+    	- CA-Zertifikat (Public-Key)
+        - CA privater Schlüssel (zum Unterschreiben der Zertifikate)
+    - 1. Server
+    	- Server-Zertifikat (mit Unterschrift der CA)
+        - Server privater Schlüssel 
+        - CA-Zertifikat (zur Unterschriftenprobe)
+    - 1. Clients 
+    	- Client-Zertifikat (mit Unterschrift der CA)
+        - Client privater Schlüssel 
+        - CA-Zertifikat (zur Unterschriftenprobe)
+    ![img.png](img.png)
+  - ### OpenVPN Server (unter Linux) konfigurieren
+    - Eigene PKI aufsetzen (separater Rechner)
+    	- CA-Schlüsselpaar erstellen
+    	- CA-Zertifikat erstellen
+	-  Schlüsselpaare erzeugen (Server, Clients, auf den Rechnern
+	  selbst)
+        - Antrag auf Unterschrift erstellen (signing requests)
+	-  Zertifikate unterschreiben
+      - Server Zertifikat unterschreiben
+      - Client Zertifikate unterschreiben
+    -  Installation Server/Client
+      - Konfigurationen erstellen
+  - ### OpenServer aufsetzen Code
+	```Shell
+ 	# 1. Software Instalation
+	apt-get install openvpn easy-rsa
+	mkdir -p /etc/openvpn/<name>`
+	cd /etc/openvpn/<name>/
+ 
+ 	# 2. Initialisieren PKI
+	cp -r /usr/share/easy-rsa/ .
+	cd easy-rsa
+	cp vars.sample vars
+ 
+	vim vars // Variablen setzen
+	./easyrsa init-pki
+ 
+	# 3. CA aufbauen
+ 	/asyrsa build-ca
+ 	.easyrsa gen-dh
+ 	
+ 	# 4. Server-Schlüsselpaar Signatur-Anfrage erstellen
+ 	/easyrsa gen-req server server-name nopass
+ 
+ 	# 5. Client-Schlüsselpaar Signatur-Anfrage erstellen
+ 	./easyrsa gen-req client client-name
+ 
+ 	# 6. Schlüssel unterschreiben
+	./easyrsa sign-req server-name
+	./easyrsa sign-req client-name
+	```
+- ## Passwörter
+  - ### Lan-Manager Hash
+    - #### Genauere Analyse
+      - 14 Passwortzeichen (gut)
+      - nur Großbuchstaben (schlecht)
+      - werden eingeteilt in zwei Gruppen zu je 7 Zeichen (Katastrophe)
+      - jede Gruppe wird unabhängig gehasht (???????????)

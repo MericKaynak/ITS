@@ -13,10 +13,10 @@
     - **Erkennung**
     - **Reaktion**
         - auf Ereignisse
-    - **Integrität** der Daten
-    - **Nutzbarkeit** der Systeme
-    - **Privatsphäre** gefährden
-    -
+    - **Integrität** der Daten || Spionage
+    - **Nutzbarkeit** der Systeme || Sabotage
+    - **Privatsphäre** gefährden ||
+    - **Verfügbarkeit** || Missbrauch
 
 - ## Definitionen
 	- ### Hauptziele zum Schutz von Informationen
